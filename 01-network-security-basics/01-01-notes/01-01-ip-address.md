@@ -127,7 +127,8 @@ Find Network ID, Broadcast ID, Address Range, Host Range for: 192.168.192.0/19
 - IP : 192.168.192.0 → 11000000.10101000.11000000.00000000
 
 Thus, 1st Address: 11000000.10101000.11000000.00000000 → 192.168.192.0
-Ans, Last Address: 11000000.10101000.11011111.11111111 → 192.168.223.255
+
+And, Last Address: 11000000.10101000.11011111.11111111 → 192.168.223.255
 
 ---
 
@@ -171,43 +172,46 @@ Used inside local networks (not routable on internet):
 
 ### Loopback Address
 
-127.0.0.0/8 → 127.0.0.0 to 127.255.255.255
+Loopback address refers to **the own system (localhost)**  
+
+Loopback Address: 127.0.0.0/8 → 127.0.0.0 to 127.255.255.255
 
 - Entire range reserved for loopback  
 
 Commonly used: 127.0.0.1
 
-💡 Refers to **your own system (localhost)**  
-
 ---
 
-## Viewing IP Address (Linux)
+## 🔍 Viewing IP Address (Linux)
 
 To check IP address:
 
-Command: ip address
+```bash
+ip address
+```
 
-or, (for short/clean view):
+Or for a shorter, cleaner output:
 
-Command: ip -br addr
+```bash
+ip -br addr
+```
 
-Example Output:
+### Example Output
 
+```bash
 lo        UNKNOWN 127.0.0.1/8
 enp0s3    UP      10.0.5.5/24
 docker0   DOWN    172.17.0.1/16
+```
 
-Meaning:
+### Meaning
 
-lo → loopback interface
+- **lo** → Loopback interface  
+- **enp0s3** → Main network interface  
+- **docker0** → Docker virtual network  
 
-enp0s3 → main network interface
-
-docker0 → Docker virtual network
-
-UP → active
-
-DOWN → inactive
+- **UP** → Active interface  
+- **DOWN** → Inactive interface  
 
 ---
 
@@ -216,57 +220,80 @@ DOWN → inactive
 There are two ways:
 
 ### 1️⃣ Manual Assignment
-Command: sudo ip addr add 192.168.60.6/24 dev enp0s3
 
-Check: ip addr or, ip -br addr
+```bash
+sudo ip addr add 192.168.60.6/24 dev enp0s3
+```
+
+Check:
+
+```bash
+ip addr
+```
+
+or
+
+```bash
+ip -br addr
+```
+
+---
 
 ### 2️⃣ Automatic Assignment (DHCP)
 
-DHCP = Dynamic Host Configuration Protocol
+**DHCP = Dynamic Host Configuration Protocol**
 
 Automatically assigns:
-IP address
-Subnet mask
-Default gateway
+- IP address  
+- Subnet mask  
+- Default gateway  
 
-💡 Used in WiFi, campus networks, etc.
+💡 Used in:
+- WiFi networks  
+- Campus networks  
+- Home routers  
 
 ---
 
 ## DNS (Domain Name System)
 
-DNS converts domain names → IP addresses
+DNS converts **domain names → IP addresses**
 
-Example:
-Human-friendly: www.google.com   // But, Machine doesn't understand it
+### Example
 
-Machine-friendly: 142.250.xxx.xxx  // But, tough to remember for human
+- Human-friendly: `www.google.com`  
+- Machine-friendly: `142.250.xxx.xxx`  
 
-💡 Without DNS, we would need to remember IPs instead of names
-
-## Check IP of a Host
-
-Command: dig domain_name
-
-Example:
-dig www.example.com
-
-output: 93.184.216.34
+💡 Without DNS, we would need to remember IP addresses instead of names.
 
 ---
 
-### Key Takeaways
+## Check IP of a Host
 
-IP address = identity of a device
+```bash
+dig domain_name
+```
 
-IPv4 = 32-bit system
+### Example
 
-Network + Host division
+```bash
+dig www.example.com
+```
 
-CIDR = flexible addressing
+**Output:**
 
-Private IPs are local-only
+```
+93.184.216.34
+```
 
-DHCP automates configuration
+---
 
-DNS maps names to IPs
+## 📌 Key Takeaways
+
+- IP address = Identity of a device  
+- IPv4 = 32-bit addressing system  
+- Network + Host division  
+- CIDR = Flexible addressing  
+- Private IPs are local-only  
+- DHCP automates configuration  
+- DNS maps names to IPs  
