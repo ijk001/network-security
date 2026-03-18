@@ -87,20 +87,13 @@ DNS namespace is organized as a **tree-like structure**.
 
 ### Types of TLDs:
 
-- **Infrastructure TLD**
-  - `.arpa`
-
-- **Generic TLD (gTLD)**
-  - `.com`, `.net`, `.org`
-
-- **Sponsored TLD (sTLD)**
-  - `.edu`, `.gov`, `.mil`, `.travel`, `.jobs`
-
-- **Country Code TLD (ccTLD)**
-  - `.au`, `.cn`, `.fr`
-
-- **Reserved TLD**
-  - `.example`, `.test`, `.localhost`, `.invalid`
+| Type                     | Function                                      | Example                                  |
+|--------------------------|-----------------------------------------------|------------------------------------------|
+| Infrastructure TLD       | Used for technical infrastructure purposes     | `.arpa`                                  |
+| Generic TLD (gTLD)       | General-purpose domains for public use         | `.com`, `.net`, `.org`                   |
+| Sponsored TLD (sTLD)     | Restricted domains managed by organizations    | `.edu`, `.gov`, `.mil`, `.travel`, `.jobs` |
+| Country Code TLD (ccTLD) | Represents specific countries                  | `.bd`, `.au`, `.fr`                      |
+| Reserved TLD             | Reserved for testing and special use           | `.example`, `.test`, `.localhost`, `.invalid` |
 
 ---
 
