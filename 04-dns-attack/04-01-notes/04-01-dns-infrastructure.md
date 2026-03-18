@@ -59,26 +59,31 @@ DNS namespace is organized as a **tree-like structure**.
 
 ---
 
-## 🧾 DNS Root Servers
+## DNS Root Servers
 
 - There are **13 logical root servers** (`a` to `m`)
-- Example:
-  - `a.root-servers.net`
-  - `b.root-servers.net`
-  - ...
-  - `m.root-servers.net`
 
-💡 Managed by:
-- ICANN  
-- Verisign  
-- NASA  
-- US DoD  
+| Hostname               | IP Addresses                          | Manager                                   |
+|------------------------|----------------------------------------|-------------------------------------------|
+| a.root-servers.net     | 198.41.0.4, 2001:503:ba3e::2:30        | VeriSign, Inc.                            |
+| b.root-servers.net     | 192.228.79.201                         | University of Southern California (ISI)    |
+| c.root-servers.net     | 192.33.4.12                            | Cogent Communications                     |
+| d.root-servers.net     | 199.7.91.13, 2001:500:2d::d            | University of Maryland                    |
+| e.root-servers.net     | 192.203.230.10                         | NASA (Ames Research Center)               |
+| f.root-servers.net     | 192.5.5.241, 2001:500:2f::f            | Internet Systems Consortium, Inc.         |
+| g.root-servers.net     | 192.112.36.4                           | US Department of Defence (NIC)            |
+| h.root-servers.net     | 128.63.2.53, 2001:500:1::803f:235      | US Army (Research Lab)                    |
+| i.root-servers.net     | 192.36.148.17, 2001:7fe::53            | Netnod                                   |
+| j.root-servers.net     | 192.58.128.30, 2001:503:c27::2:30      | VeriSign, Inc.                            |
+| k.root-servers.net     | 193.0.14.129, 2001:7fd::1              | RIPE NCC                                 |
+| l.root-servers.net     | 199.7.83.42, 2001:500:3::42            | ICANN                                    |
+| m.root-servers.net     | 202.12.27.33, 2001:dc3::35             | WIDE Project                             |
 
 👉 Root servers **do NOT store full data**, they only **redirect to TLD servers**
 
 ---
 
-## 🌐 Top-Level Domains (TLD)
+## Top-Level Domains (TLD)
 
 ### Types of TLDs:
 
@@ -135,7 +140,7 @@ A **DNS Zone** is a portion of the domain namespace managed by a DNS server.
 
 ---
 
-## ⚖️ Subdomain vs DNS Zone
+## Subdomain vs DNS Zone
 
 | Feature        | Subdomain                          | DNS Zone                              |
 |---------------|-----------------------------------|--------------------------------------|
@@ -174,7 +179,7 @@ A **DNS Zone** is a portion of the domain namespace managed by a DNS server.
 
 ---
 
-## 🌍 Public DNS Servers
+## Public DNS Servers
 
 - Google DNS → `8.8.8.8`
 - Cloudflare → `1.1.1.1`
@@ -182,7 +187,7 @@ A **DNS Zone** is a portion of the domain namespace managed by a DNS server.
 
 ---
 
-## 📌 Key Takeaways
+## Key Takeaways
 
 - DNS is a **hierarchical distributed system**  
 - Root → TLD → Authoritative structure  
