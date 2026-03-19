@@ -39,22 +39,12 @@ DNS namespace is organized as a **tree-like structure**.
 
 ### Hierarchy Example
 
-```
-.
-├── (Root)
-│   ├── .com
-│   ├── .net
-│   ├── .edu
-│   ├── .gov
-│   └── .fr
-│        └── example.com
-│             └── www.example.com
-```
+![DNS Domain Hierarchy](image.png)
 
 ### Explanation
 
 - **TLD:** `.com`  
-- **Second-Level Domain:** `example`  
+- **Second-Level Domain:** `google`  
 - **Subdomain:** `www`  
 
 ---
