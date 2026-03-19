@@ -12,7 +12,7 @@ The process starts from the **user’s local machine**. If the answer is not ava
 
 ## 🧭 DNS Query Process (Conceptual Steps)
 
-![DNS Query]](image-1.png)
+![DNS Query](image-1.png)
 
 ### Step 1: Check Local DNS Files
 
