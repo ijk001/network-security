@@ -223,6 +223,8 @@ Loopback refers to the system itself (**localhost**).
 ip address
 ```
 
+or, 
+
 ```bash
 ip -br addr
 ```
