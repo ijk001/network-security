@@ -45,7 +45,7 @@ DNS namespace is organized as a **tree-like structure**.
 
 - **TLD:** `.com`  
 - **Second-Level Domain:** `google`  
-- **Subdomain:** `www`  
+- **Subdomain:** `www, mail`  
 
 ---
 
