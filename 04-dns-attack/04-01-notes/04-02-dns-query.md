@@ -12,6 +12,8 @@ The process starts from the **user’s local machine**. If the answer is not ava
 
 ## 🧭 DNS Query Process (Conceptual Steps)
 
+![DNS Query]](image-1.png)
+
 ### Step 1: Check Local DNS Files
 
 Before contacting any DNS server, the user machine checks its local DNS configuration files:
@@ -111,6 +113,8 @@ Example flow:
 ---
 
 ## 🧪 DNS Query Process (Example: www.example.net)
+
+![DNS QUERY](image-1.png)
 
 ---
 
