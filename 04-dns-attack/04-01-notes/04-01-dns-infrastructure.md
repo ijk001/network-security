@@ -1,8 +1,8 @@
-# DNS Infrastructure
+# 🌐 DNS Infrastructure
 
 ---
 
-## What is DNS?
+## 📌 What is DNS?
 
 **DNS (Domain Name System)** is a distributed system that translates:
 
@@ -17,20 +17,20 @@
 
 ---
 
-## DNS Infrastructure Overview
+## 🧱 DNS Infrastructure Overview
 
 DNS uses a **hierarchical and distributed architecture**.
 
 ### Main Components:
 
-1. **DNS Resolver**
+1. **DNS Resolver (Recursive Resolver)**
 2. **Root Name Server**
 3. **Top-Level Domain (TLD) Server**
 4. **Authoritative Name Server**
 
 ---
 
-## DNS Domain Hierarchy
+## 🌳 DNS Domain Hierarchy
 
 DNS namespace is organized as a **tree-like structure**.
 
@@ -45,11 +45,11 @@ DNS namespace is organized as a **tree-like structure**.
 
 - **TLD:** `.com`  
 - **Second-Level Domain:** `google`  
-- **Subdomain:** `www, mail`  
+- **Subdomains:** `www`, `mail`  
 
 ---
 
-## DNS Root Servers
+## 🧾 DNS Root Servers
 
 - There are **13 logical root servers** (`a` to `m`)
 
@@ -61,7 +61,7 @@ DNS namespace is organized as a **tree-like structure**.
 | d.root-servers.net     | 199.7.91.13, 2001:500:2d::d            | University of Maryland                    |
 | e.root-servers.net     | 192.203.230.10                         | NASA (Ames Research Center)               |
 | f.root-servers.net     | 192.5.5.241, 2001:500:2f::f            | Internet Systems Consortium, Inc.         |
-| g.root-servers.net     | 192.112.36.4                           | US Department of Defence (NIC)            |
+| g.root-servers.net     | 192.112.36.4                           | US Department of Defense (NIC)            |
 | h.root-servers.net     | 128.63.2.53, 2001:500:1::803f:235      | US Army (Research Lab)                    |
 | i.root-servers.net     | 192.36.148.17, 2001:7fe::53            | Netnod                                   |
 | j.root-servers.net     | 192.58.128.30, 2001:503:c27::2:30      | VeriSign, Inc.                            |
@@ -69,25 +69,25 @@ DNS namespace is organized as a **tree-like structure**.
 | l.root-servers.net     | 199.7.83.42, 2001:500:3::42            | ICANN                                    |
 | m.root-servers.net     | 202.12.27.33, 2001:dc3::35             | WIDE Project                             |
 
-👉 Root servers **do NOT store full data**, they only **redirect to TLD servers**
+👉 Root servers **do NOT store full records** — they **redirect queries to TLD servers**
 
 ---
 
-## Top-Level Domains (TLD)
+## 🌐 Top-Level Domains (TLD)
 
 ### Types of TLDs:
 
 | Type                     | Function                                      | Example                                  |
 |--------------------------|-----------------------------------------------|------------------------------------------|
-| Infrastructure TLD       | Used for technical infrastructure purposes     | `.arpa`                                  |
-| Generic TLD (gTLD)       | General-purpose domains for public use         | `.com`, `.net`, `.org`                   |
-| Sponsored TLD (sTLD)     | Restricted domains managed by organizations    | `.edu`, `.gov`, `.mil`, `.travel`, `.jobs` |
-| Country Code TLD (ccTLD) | Represents specific countries                  | `.bd`, `.au`, `.fr`                      |
-| Reserved TLD             | Reserved for testing and special use           | `.example`, `.test`, `.localhost`, `.invalid` |
+| Infrastructure TLD       | Used for DNS infrastructure                   | `.arpa`                                  |
+| Generic TLD (gTLD)       | General-purpose domains                       | `.com`, `.net`, `.org`                   |
+| Sponsored TLD (sTLD)     | Restricted domains managed by organizations   | `.edu`, `.gov`, `.mil`, `.travel`, `.jobs` |
+| Country Code TLD (ccTLD) | Represents specific countries                 | `.bd`, `.au`, `.fr`                      |
+| Reserved TLD             | Reserved for testing and special use          | `.example`, `.test`, `.localhost`, `.invalid` |
 
 ---
 
-## Subdomain
+## 🔹 Subdomain
 
 A **subdomain** is a subdivision of a main domain.
 
@@ -100,15 +100,15 @@ A **subdomain** is a subdivision of a main domain.
   - `maps.google.com`
 
 💡 Subdomains are used to:
-- Organize services
-- Separate applications
-- Structure large systems
+- Organize services  
+- Separate applications  
+- Structure large systems  
 
 ---
 
-## DNS Zones
+## 🗂️ DNS Zones
 
-A **DNS Zone** is a portion of the domain namespace managed by a DNS server.
+A **DNS zone** is a portion of the domain namespace managed by a DNS server.
 
 ### Example
 
@@ -123,14 +123,14 @@ A **DNS Zone** is a portion of the domain namespace managed by a DNS server.
 
 ---
 
-## Subdomain vs DNS Zone
+## ⚖️ Subdomain vs DNS Zone
 
 | Feature        | Subdomain                          | DNS Zone                              |
 |---------------|-----------------------------------|--------------------------------------|
 | Definition    | Logical subdivision of a domain    | Administrative portion of DNS        |
 | Purpose       | Organization                      | Management & delegation              |
 | Example       | `blog.example.com`                | Zone for `example.com` or `usa.example.com` |
-| Dependency    | Always part of a domain           | May be managed separately            |
+| Dependency    | Always part of a domain           | May be managed independently         |
 
 💡 Key Idea:
 - **Every DNS zone is a domain**
@@ -138,44 +138,46 @@ A **DNS Zone** is a portion of the domain namespace managed by a DNS server.
 
 ---
 
-## DNS Server Types
+## 🌍 DNS Server Types
 
-### 1️⃣ Recursive Resolver
-- First contact point (client → resolver)
-- Performs full lookup process
+### 1️⃣ Recursive Resolver (DNS Resolver)
+- First contact point for the client  
+- Performs the full lookup process  
 
 ---
 
 ### 2️⃣ Root Server
-- Directs queries to TLD servers
+- Directs queries to TLD servers  
 
 ---
 
 ### 3️⃣ TLD Server
-- Directs queries to authoritative servers
+- Directs queries to authoritative servers  
 
 ---
 
 ### 4️⃣ Authoritative Server
-- Stores DNS records
-- Provides final IP address
+- Stores DNS records  
+- Provides the final IP address  
 
 ---
 
-## Public DNS Servers
+## 🌍 Public DNS Servers
 
-- Google DNS → `8.8.8.8`
-- Cloudflare → `1.1.1.1`
-- OpenDNS → `208.67.222.222`
+- Google DNS → `8.8.8.8`  
+- Cloudflare → `1.1.1.1`  
+- OpenDNS → `208.67.222.222`  
 
 ---
 
-## Key Takeaways
+## 📌 Key Takeaways
 
 - DNS is a **hierarchical distributed system**  
-- Root → TLD → Authoritative structure  
-- Domains follow a **tree hierarchy**  
+- Query flow: **Root → TLD → Authoritative**  
+- Domains follow a **tree structure**  
 - Subdomains organize services logically  
-- DNS Zones enable **delegation & scalability**  
+- DNS zones enable **delegation and scalability**  
 - A subdomain becomes a zone only when delegated  
 - Root servers guide queries globally  
+
+---

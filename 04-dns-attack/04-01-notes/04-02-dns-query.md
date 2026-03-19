@@ -1,4 +1,4 @@
-# 🌐 DNS Query Process
+# 🌐 04-02: DNS Query Process
 
 ---
 
@@ -111,8 +111,6 @@ Example flow:
 ---
 
 ## 🧪 DNS Query Process (Example: www.example.net)
-
-Now let us see the full DNS query process step by step.
 
 ---
 
