@@ -1,8 +1,10 @@
-# 01-01: IP Address Basics
+# 🌐 01-01: IP Address Basics
 
-## What is an IP Address?
+---
 
-An **IP Address (Internet Protocol Address)** is a unique identifier assigned to each device on a network.
+## 📌 What is an IP Address?
+
+An **IP Address (Internet Protocol Address)** uniquely identifies a device on a network.
 
 - Works like a **home address** for devices  
 - Used for **communication between devices**  
@@ -10,7 +12,7 @@ An **IP Address (Internet Protocol Address)** is a unique identifier assigned to
 
 ---
 
-## Types of IP Address
+## 🔹 Types of IP Address
 
 - **IPv4** (most commonly used)  
 - **IPv6** (newer version, larger address space)  
@@ -20,13 +22,14 @@ An **IP Address (Internet Protocol Address)** is a unique identifier assigned to
 - 128-bit address  
 - Written in 8 hexadecimal blocks  
 
-Example: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+Example:  
+`2001:0db8:85a3:0000:0000:8a2e:0370:7334`
 
 💡 Created to solve IPv4 address exhaustion  
 
 ---
 
-## IPv4 Address Structure
+## 🔹 IPv4 Address Structure
 
 An IPv4 address consists of:
 
@@ -34,13 +37,15 @@ An IPv4 address consists of:
 - Divided into **4 octets (8 bits each)**  
 - Written in **decimal format**  
 
-Example: 192.168.60.5
+Example:  
+`192.168.60.5`
 
-Binary representation: 11000000.10101000.00111100.00000101
+Binary representation:  
+`11000000.10101000.00111100.00000101`
 
 ---
 
-## Network ID vs Host ID
+## 🔹 Network ID vs Host ID
 
 An IP address has two parts:
 
@@ -49,28 +54,33 @@ An IP address has two parts:
 | Network ID | Identifies the network |
 | Host ID    | Identifies the device |
 
-Example: 192.168.60.5/24
+Example: `192.168.60.5/24`
 
 - `/24` → first 24 bits = Network  
 - Remaining 8 bits = Host  
 
 ---
 
-## Subnet Mask (Short Idea)
+## 🔹 Subnet Mask
 
 A **subnet mask** defines which part of an IP is:
 
 - Network portion  
 - Host portion  
 
-Example: 11111111.11111111.11111100.00000000 → 255.255.252.0
+Example:  
+`11111111.11111111.11111100.00000000 → 255.255.252.0`
 
 - `1` → network bits  
 - `0` → host bits  
 
+💡 Trick:
+- Network ID → all host bits = 0  
+- Broadcast ID → all host bits = 1  
+
 ---
 
-## Original Class-Based Addressing
+## 🔹 Original Class-Based Addressing
 
 Before CIDR, IP addresses were divided into classes.
 
@@ -78,29 +88,35 @@ Before CIDR, IP addresses were divided into classes.
 
 | Class | Range | Default Mask | Use |
 |------|------|-------------|-----|
-| A | 0.0.0.0 – 127.255.255.255 | /8 | Large networks |
+| A | 1.0.0.0 – 126.255.255.255 | /8 | Large networks |
 | B | 128.0.0.0 – 191.255.255.255 | /16 | Medium networks |
 | C | 192.0.0.0 – 223.255.255.255 | /24 | Small networks |
 | D | 224.0.0.0 – 239.255.255.255 | Multicast | Special |
 | E | 240.0.0.0 – 255.255.255.255 | Reserved | Experimental |
 
-💡 **Limitation:** Wasted many IP addresses → replaced by CIDR  
+💡 Note: `127.x.x.x` is reserved for loopback  
+
+💡 Limitation: Wasted many IP addresses → replaced by CIDR  
 
 ---
 
-## CIDR (Classless Inter-Domain Routing)
+## 🔹 CIDR (Classless Inter-Domain Routing)
 
 CIDR removes class limitation and allows flexible subnetting.
 
 Format:
+```
 IP_Address/Prefix_Length
+```
 
-Example: 192.168.60.3/26
+Example:  
+`192.168.60.3/26`
 
-- `/26` → `11111111.11111111.11111111.11000000`  
-It means 26 bits for network  
+- `/26 → 26 bits for network, 6 bits for host`  
+- Binary mask:  
+  `11111111.11111111.11111111.11000000`  
 
-- More flexible and efficient  
+💡 More flexible and efficient  
 
 ---
 
@@ -156,11 +172,9 @@ So, the Last Address: 192.168.223.255
 
 ---
 
-## Special IP Addresses
+## 🔹 Special IP Addresses
 
 ### Private IP Addresses
-
-Used inside local networks (not routable on internet):
 
 | Range | CIDR |
 |------|------|
@@ -170,76 +184,62 @@ Used inside local networks (not routable on internet):
 
 ---
 
+### Public vs Private IP
+
+| Type | Description |
+|------|------------|
+| Public IP | Globally unique, routable on internet |
+| Private IP | Used inside local networks, not routable |
+
+💡 Private IPs require **NAT** to access the internet  
+
+---
+
 ### Loopback Address
 
-Loopback address refers to **the own system (localhost)**  
+Loopback refers to the system itself (**localhost**).
 
-Loopback Address: 127.0.0.0/8 → 127.0.0.0 to 127.255.255.255
+- Range: `127.0.0.0/8`  
+- Common: `127.0.0.1`  
+- Used for testing and internal communication  
+- Packets never leave the device  
 
-- Entire range reserved for loopback  
+---
 
-Commonly used: 127.0.0.1
+## 🔹 Static vs Dynamic IP
+
+| Type | Description |
+|------|------------|
+| Static IP | Manually assigned, does not change |
+| Dynamic IP | Assigned by DHCP, may change |
+
+💡 Most home networks use dynamic IPs  
 
 ---
 
 ## 🔍 Viewing IP Address (Linux)
 
-To check IP address:
-
 ```bash
 ip address
 ```
-
-Or for a shorter, cleaner output:
 
 ```bash
 ip -br addr
 ```
 
-### Example Output
-
-```bash
-lo        UNKNOWN 127.0.0.1/8
-enp0s3    UP      10.0.5.5/24
-docker0   DOWN    172.17.0.1/16
-```
-
-### Meaning
-
-- **lo** → Loopback interface  
-- **enp0s3** → Main network interface  
-- **docker0** → Docker virtual network  
-
-- **UP** → Active interface  
-- **DOWN** → Inactive interface  
-
 ---
 
-## Assigning IP Address
+## ⚙️ Assigning IP Address
 
-There are two ways:
-
-### 1️⃣ Manual Assignment
+### Manual
 
 ```bash
 sudo ip addr add 192.168.60.6/24 dev enp0s3
 ```
 
-Check:
-
-```bash
-ip addr
-```
-
-or
-
-```bash
-ip -br addr
-```
-
 ---
 
-### 2️⃣ Automatic Assignment (DHCP)
+### Automatic (DHCP)
 
 **DHCP = Dynamic Host Configuration Protocol**
 
@@ -248,40 +248,26 @@ Automatically assigns:
 - Subnet mask  
 - Default gateway  
 
-💡 Used in:
-- WiFi networks  
-- Campus networks  
-- Home routers  
+---
+
+## 🌍 DNS (Short Idea)
+
+DNS converts:
+
+- Domain names → IP addresses  
+
+Example:
+- `www.google.com → 142.250.xxx.xxx`
 
 ---
 
-## DNS (Domain Name System)
-
-DNS converts **domain names → IP addresses**
-
-### Example
-
-- Human-friendly: `www.google.com`  
-- Machine-friendly: `142.250.xxx.xxx`  
-
-💡 Without DNS, we would need to remember IP addresses instead of names.
-
----
-
-## Check IP of a Host
-
-```bash
-dig domain_name
-```
-
-### Example
+## 🔎 Check IP of a Host
 
 ```bash
 dig www.example.com
 ```
 
-**Output:**
-
+Output:
 ```
 93.184.216.34
 ```
@@ -290,10 +276,12 @@ dig www.example.com
 
 ## 📌 Key Takeaways
 
-- IP address = Identity of a device  
-- IPv4 = 32-bit addressing system  
+- IP address uniquely identifies a device  
+- IPv4 = 32-bit system  
 - Network + Host division  
-- CIDR = Flexible addressing  
-- Private IPs are local-only  
+- CIDR = flexible addressing  
+- Private IPs require NAT  
 - DHCP automates configuration  
 - DNS maps names to IPs  
+
+---
