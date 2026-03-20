@@ -1,255 +1,216 @@
-# 🌐 04-02: DNS Query Process
+# 🌐 04-03: DNS Packets Construction
 
 ---
 
 ## 📌 Introduction
 
-The **DNS query process** is the sequence of steps used to translate a hostname into its corresponding IP address.
+DNS packets are the core units of communication in the Domain Name System.  
+They carry queries and responses between clients and DNS servers.
 
-The process starts from the **user’s local machine**. If the answer is not available locally, the request moves through the global DNS hierarchy step by step until the correct IP address is found.
-
----
-
-## 🧭 DNS Query Process (Conceptual Steps)
-
-![DNS Query](image-1.png)
-
-### Step 1: Check Local DNS Files
-
-Before contacting any DNS server, the user machine checks its local DNS configuration files:
-
-- `/etc/hosts`  
-  - Stores manually defined hostname-to-IP mappings  
-
-- `/etc/resolv.conf`  
-  - Specifies the IP address of the local DNS server  
+Understanding DNS packets helps in:
+- Debugging DNS issues
+- Analyzing network traffic
+- Building custom DNS tools
+- Understanding security attacks (e.g., spoofing)
 
 ---
 
-### Step 2: Contact the Local DNS Server
+## 🧱 DNS Packet Structure
 
-If the hostname is not resolved locally, the user machine sends the query to the **Local DNS Server**.
+A DNS packet follows a layered structure:
 
-💡 The Local DNS Server is also called:
-- **DNS Resolver**
-- **Recursive Resolver**
+IP Header → UDP Header → DNS Header → DNS Data
 
----
-
-### Step 3: Check DNS Cache
-
-The local DNS server first checks its **DNS cache**:
-
-- If found → return immediately  
-- If not → continue lookup  
+- IP Header → handles routing  
+- UDP Header → uses port 53  
+- DNS Header → controls behavior  
+- DNS Data → contains actual query/response  
 
 ---
 
-### Step 4: Query the Root Server
+## 🧩 DNS Header Fields
 
-If the answer is not cached, the resolver queries a **Root Server**.
-
-- Root server provides the location of the appropriate **TLD server**
-
----
-
-### Step 5: Query the TLD Server
-
-The resolver queries the **Top-Level Domain (TLD) server**.
-
-- TLD server returns the **authoritative nameserver** for the domain  
+| Field | Purpose |
+|------|--------|
+| id | Unique transaction ID |
+| flags | Query/response control |
+| qdcount | Number of questions |
+| ancount | Number of answers |
+| nscount | Authority records |
+| arcount | Additional records |
 
 ---
 
-### Step 6: Query the Authoritative Nameserver
+### ⚙️ Important Flags
 
-The resolver queries the **Authoritative Nameserver**.
-
-- Stores actual DNS records  
-- Returns the **final IP address**  
-
----
-
-### Step 7: Return the Result
-
-- Resolver caches the result  
-- IP address is returned to the user machine  
+- qr → 0 (query), 1 (response)  
+- aa → authoritative answer  
+- rd → recursion desired  
+- ra → recursion available  
 
 ---
 
-## 🔄 Summary of Conceptual Flow
+## 📦 DNS Sections
 
-```text
-User → Local Files → Resolver → Cache → Root → TLD → Authoritative → IP Address
-```
-
----
-
-## 🔁 Recursive vs Iterative Query
-
-### 🔹 Recursive Query
-
-- The client asks the resolver for the **final answer**
-- The resolver performs all steps (Root → TLD → Authoritative)
-- The client receives the final IP directly
-
-💡 Used between:
-- User → Local DNS Server
+| Section | Description |
+|--------|-------------|
+| qd | Question |
+| an | Answer |
+| ns | Authority |
+| ar | Additional |
 
 ---
 
-### 🔹 Iterative Query
-
-- Each DNS server returns the **best possible answer**
-- It may not be final, but points to the next server
-
-Example flow:
-- Root → "Ask TLD server"
-- TLD → "Ask authoritative server"
-
-💡 Used between:
-- DNS servers (Resolver ↔ Root ↔ TLD ↔ Authoritative)
-
----
-
-## 🧪 DNS Query Process (Example: www.example.net)
-
-![DNS QUERY](image-1.png)
-
----
-
-### Step 1: Check `/etc/hosts`
-
-The system checks:
-
-```bash
-/etc/hosts
-```
-
-- If found → use IP  
-- Otherwise → continue  
-
----
-
-### Step 2: Check `/etc/resolv.conf`
-
-The system checks:
-
-```bash
-/etc/resolv.conf
-```
+## 📄 DNS Records (Concept)
 
 Example:
-```bash
-nameserver 10.0.2.3
-```
 
-- This gives the local DNS server  
+Query: www.example.com  
 
----
-
-### Step 3: Query Local DNS Server
-
-The system sends:
-
-```bash
-www.example.net
-```
-
-- Resolver checks cache  
-- If not found → continues  
+Answer: www.example.com → 1.2.3.4  
+Authority: example.com → ns.example.com  
+Additional: ns.example.com → 10.0.0.1  
 
 ---
 
-### Step 4: Query Root Server
+## 🛠️ DNS Structure in Scapy
 
-```bash
-dig @a.root-servers.net www.example.net
-```
+Use the following command to inspect DNS structure:
 
-Response:
+ls(DNS)
 
-```bash
-net.    IN   NS   a.gtld-servers.net.
-net.    IN   NS   e.gtld-servers.net.
-```
-
-👉 Root server points to `.net` TLD servers  
+Key components:
+- qd → question
+- an → answer
+- ns → authority
+- ar → additional
 
 ---
 
-### Step 5: Query TLD Server
+## 🧪 DNS Query Record (DNSQR)
 
-```bash
-dig @a.gtld-servers.net www.example.net
-```
-
-Response:
-
-```bash
-example.net.   IN   NS   a.iana-servers.net.
-example.net.   IN   NS   b.iana-servers.net.
-```
-
-👉 TLD server points to authoritative server  
+Fields:
+- qname → domain name
+- qtype → record type (A = 1)
+- qclass → class (IN = 1)
 
 ---
 
-### Step 6: Query Authoritative Server
+## 🧪 DNS Resource Record (DNSRR)
 
-```bash
-dig @b.iana-servers.net www.example.net
-```
-
-Answer:
-
-```bash
-www.example.net.   IN   A   93.184.216.34
-```
-
-👉 Final IP address obtained  
+Fields:
+- rrname → domain name
+- type → record type
+- rclass → class
+- ttl → time to live
+- rdata → actual data (IP / NS)
 
 ---
 
-### Step 7: Return Result
+## 📡 Example: Sending a DNS Query
 
-- Resolver caches result  
-- Returns IP to user  
+Python (Scapy):
 
-Final IP:
+from scapy.all import *
 
-```bash
-93.184.216.34
-```
+IPpkt  = IP(dst='8.8.8.8')
+UDPpkt = UDP(dport=53)
 
----
+Qdsec  = DNSQR(qname='www.example.com')
 
-## 🖥️ Important Local DNS Files
+DNSpkt = DNS(
+    id=100,
+    qr=0,
+    rd=1,
+    qd=Qdsec
+)
 
-| File | Purpose |
-|------|--------|
-| `/etc/hosts` | Manual hostname-to-IP mapping |
-| `/etc/resolv.conf` | Defines local DNS server |
-| `/etc/bind/db.root` | Stores root server information |
-| `/etc/bind/named.conf.default-zones` | BIND root configuration |
+packet = IPpkt / UDPpkt / DNSpkt
 
----
+response = sr1(packet, timeout=2)
 
-## 📌 Key Points
-
-- DNS starts from the **local machine**
-- Local DNS server = **Resolver / Recursive Resolver**
-- Cache improves performance
-- Query flows: Root → TLD → Authoritative
-- Recursive (client → resolver), Iterative (server → server)
-- Final answer comes from authoritative server
+if response:
+    print(response[DNS].summary())
 
 ---
 
-## ✅ Final Flow in One Line
+## 🖥️ Simple DNS Server (Concept)
 
-```text
-User → /etc/hosts → /etc/resolv.conf → Resolver → Cache → Root → TLD → Authoritative → IP Address
-```
+### Step 1: Receive Query
+
+from scapy.all import *
+from socket import socket, AF_INET, SOCK_DGRAM
+
+sock = socket(AF_INET, SOCK_DGRAM)
+sock.bind(("0.0.0.0", 1053))
+
+while True:
+    data, addr = sock.recvfrom(4096)
+
+    dns_req = DNS(data)
+    query_name = dns_req.qd.qname.decode()
+
+    print("Query:", query_name)
+
+---
+
+### Step 2: Build Response
+
+    answer = DNSRR(
+        rrname=dns_req.qd.qname,
+        type="A",
+        rdata="10.2.3.6",
+        ttl=300
+    )
+
+---
+
+### Step 3: Send Response
+
+    dns_resp = DNS(
+        id=dns_req.id,
+        qr=1,
+        aa=1,
+        qd=dns_req.qd,
+
+        qdcount=1,
+        ancount=1,
+
+        an=answer
+    )
+
+    sock.sendto(bytes(dns_resp), addr)
+
+---
+
+## 🔄 Communication Flow
+
+Client → DNS Query → Server  
+Server → DNS Response → Client  
+
+---
+
+## 🧠 Key Takeaways
+
+- DNS uses layered design (IP → UDP → DNS)
+- DNSQR is used for queries
+- DNSRR is used for answers
+- Header fields control packet behavior
+- Scapy enables full packet manipulation
+
+---
+
+## 🚀 Why This Matters
+
+- Network debugging
+- Packet analysis (Wireshark)
+- Security research
+- Building custom DNS systems
+
+---
+
+## ✅ Final Flow
+
+IP → UDP → DNS Header → Question → Answer → Authority → Additional
 
 ---
