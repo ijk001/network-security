@@ -7,12 +7,6 @@
 DNS packets are the core units of communication in the Domain Name System.  
 They carry queries and responses between clients and DNS servers.
 
-Understanding DNS packets helps in:
-- Debugging DNS issues
-- Analyzing network traffic
-- Building custom DNS tools
-- Understanding security attacks (e.g., spoofing)
-
 ---
 
 ## 🧱 DNS Packet Structure
@@ -25,6 +19,8 @@ IP Header → UDP Header → DNS Header → DNS Data
 - UDP Header → uses port 53  
 - DNS Header → controls behavior  
 - DNS Data → contains actual query/response  
+
+![DNS Structure](image-2.png)
 
 ---
 
@@ -50,7 +46,7 @@ IP Header → UDP Header → DNS Header → DNS Data
 
 ---
 
-## 📦 DNS Sections
+## 📦 DNS Data Field
 
 | Section | Description |
 |--------|-------------|
