@@ -123,6 +123,7 @@ Fields:
 from scapy.all import *
 
 IPpkt  = IP(dst='8.8.8.8')        # Google DNS
+
 UDPpkt = UDP(dport=53)            # DNS port
 
 Qdsec  = DNSQR(qname='www.example.com')
@@ -162,6 +163,7 @@ sock = socket(AF_INET, SOCK_DGRAM)
 sock.bind(("0.0.0.0", 1053))
 
 while True:
+    
     data, addr = sock.recvfrom(4096)
 
     dns_req = DNS(data)
