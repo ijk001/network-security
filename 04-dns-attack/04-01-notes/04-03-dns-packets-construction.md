@@ -5,7 +5,7 @@
 ## 📌 Introduction
 
 DNS packets are the core units of communication in the Domain Name System.  
-They carry queries and responses between clients and DNS servers.
+They carry queries (requests) and responses (answers) between clients and DNS servers.
 
 ---
 
@@ -28,18 +28,18 @@ IP Header → UDP Header → DNS Header → DNS Data
 
 | Field | Purpose |
 |------|--------|
-| id | Unique transaction ID |
-| flags | Query/response control |
-| qdcount | Number of questions |
-| ancount | Number of answers |
-| nscount | Authority records |
-| arcount | Additional records |
+| id | Unique transaction ID (matches request & response) |
+| flags | Query/response control information |
+| qdcount | Number of Question Records |
+| ancount | Number of Answer Records |
+| nscount | Number of Authority Records |
+| arcount | Number of Additional Records |
 
 ---
 
 ### ⚙️ Important Flags
 
-- qr → 0 (query), 1 (response)  
+- qr → 0 = query, 1 = response  
 - aa → authoritative answer  
 - rd → recursion desired  
 - ra → recursion available  
@@ -50,67 +50,80 @@ IP Header → UDP Header → DNS Header → DNS Data
 
 | Section | Description |
 |--------|-------------|
-| qd | Question |
-| an | Answer |
-| ns | Authority |
-| ar | Additional |
+| qd | Question (what we are asking) |
+| an | Answer (final result, e.g., IP address) |
+| ns | Authority (which server is responsible) |
+| ar | Additional (extra info like IP of nameserver) |
 
 ---
 
-## 📄 DNS Records (Concept)
+## 📄 DNS Records (Concept — Clarified)
 
-Example:
+Query:
+www.example.com
 
-Query: www.example.com  
+DNS Response (concept):
 
-Answer: www.example.com → 1.2.3.4  
-Authority: example.com → ns.example.com  
-Additional: ns.example.com → 10.0.0.1  
+- Question (qd) → What is IP of www.example.com?
+- Answer (an) → www.example.com → 1.2.3.4
+- Authority (ns) → example.com → ns.example.com
+- Additional (ar) → ns.example.com → 10.0.0.1
+
+Meaning:
+- Answer = final result  
+- Authority = who knows  
+- Additional = helpful shortcut  
 
 ---
 
 ## 🛠️ DNS Structure in Scapy
 
-Use the following command to inspect DNS structure:
-
+Command:
 ls(DNS)
 
 Key components:
-- qd → question
-- an → answer
-- ns → authority
-- ar → additional
+- qd → question section  
+- an → answer section  
+- ns → authority section  
+- ar → additional section  
 
 ---
 
 ## 🧪 DNS Query Record (DNSQR)
 
+DNSQR represents the **question part of a DNS packet**.
+
 Fields:
-- qname → domain name
-- qtype → record type (A = 1)
-- qclass → class (IN = 1)
+- qname → domain name  
+- qtype → record type (A = IPv4)  
+- qclass → class (IN = Internet)  
 
 ---
 
 ## 🧪 DNS Resource Record (DNSRR)
 
+DNSRR represents **actual data in responses**.
+
+Used in:
+- Answer section  
+- Authority section  
+- Additional section  
+
 Fields:
-- rrname → domain name
-- type → record type
-- rclass → class
-- ttl → time to live
-- rdata → actual data (IP / NS)
+- rrname → domain name  
+- type → record type  
+- rclass → class  
+- ttl → cache time  
+- rdata → actual data (IP or nameserver)  
 
 ---
 
 ## 📡 Example: Sending a DNS Query
 
-Python (Scapy):
-
 from scapy.all import *
 
-IPpkt  = IP(dst='8.8.8.8')
-UDPpkt = UDP(dport=53)
+IPpkt  = IP(dst='8.8.8.8')        # Google DNS
+UDPpkt = UDP(dport=53)            # DNS port
 
 Qdsec  = DNSQR(qname='www.example.com')
 
@@ -128,9 +141,17 @@ response = sr1(packet, timeout=2)
 if response:
     print(response[DNS].summary())
 
+Explanation:
+- IP → destination server  
+- UDP → port 53  
+- DNSQR → question  
+- DNS → full packet  
+- "/" → stack layers  
+- sr1() → send + receive  
+
 ---
 
-## 🖥️ Simple DNS Server (Concept)
+## 🖥️ Simple DNS Server
 
 ### Step 1: Receive Query
 
@@ -148,34 +169,47 @@ while True:
 
     print("Query:", query_name)
 
+Explanation:
+- Creates UDP server  
+- Receives DNS packet  
+- Extracts domain name  
+
 ---
 
 ### Step 2: Build Response
 
-    answer = DNSRR(
-        rrname=dns_req.qd.qname,
-        type="A",
-        rdata="10.2.3.6",
-        ttl=300
-    )
+answer = DNSRR(
+    rrname=dns_req.qd.qname,
+    type="A",
+    rdata="10.2.3.6",
+    ttl=300
+)
+
+Explanation:
+- Creates answer record  
+- Maps domain → IP  
 
 ---
 
 ### Step 3: Send Response
 
-    dns_resp = DNS(
-        id=dns_req.id,
-        qr=1,
-        aa=1,
-        qd=dns_req.qd,
+dns_resp = DNS(
+    id=dns_req.id,
+    qr=1,
+    aa=1,
+    qd=dns_req.qd,
+    qdcount=1,
+    ancount=1,
+    an=answer
+)
 
-        qdcount=1,
-        ancount=1,
+sock.sendto(bytes(dns_resp), addr)
 
-        an=answer
-    )
-
-    sock.sendto(bytes(dns_resp), addr)
+Explanation:
+- id must match request  
+- qr=1 → response  
+- aa=1 → authoritative  
+- an → attach answer  
 
 ---
 
@@ -189,19 +223,19 @@ Server → DNS Response → Client
 ## 🧠 Key Takeaways
 
 - DNS uses layered design (IP → UDP → DNS)
-- DNSQR is used for queries
-- DNSRR is used for answers
-- Header fields control packet behavior
-- Scapy enables full packet manipulation
+- DNSQR = question
+- DNSRR = actual data
+- Header controls behavior
+- Scapy allows manual packet creation  
 
 ---
 
 ## 🚀 Why This Matters
 
-- Network debugging
-- Packet analysis (Wireshark)
-- Security research
-- Building custom DNS systems
+- Network debugging  
+- Packet analysis (Wireshark)  
+- Security research  
+- Building DNS systems  
 
 ---
 
