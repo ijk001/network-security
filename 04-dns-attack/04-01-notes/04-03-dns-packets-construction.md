@@ -115,8 +115,9 @@ Fields:
 ## 📡 Example: Sending a DNS Query
 
 Code:
-    from scapy.all import *
+    
 
+    from scapy.all import *
     IPpkt  = IP(dst='8.8.8.8')        # DNS server
     UDPpkt = UDP(dport=53)            # DNS port
 
@@ -151,9 +152,9 @@ Explanation:
 ### Step 1: Receive Query
 
 Code:
+    
     from scapy.all import *
     from socket import socket, AF_INET, SOCK_DGRAM
-
     sock = socket(AF_INET, SOCK_DGRAM)
     sock.bind(("0.0.0.0", 1053))
 
