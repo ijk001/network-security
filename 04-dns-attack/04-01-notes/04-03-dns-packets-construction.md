@@ -118,6 +118,7 @@ Code:
     
 
     from scapy.all import *
+    
     IPpkt  = IP(dst='8.8.8.8')        # DNS server
     UDPpkt = UDP(dport=53)            # DNS port
 
@@ -155,6 +156,7 @@ Code:
     
     from scapy.all import *
     from socket import socket, AF_INET, SOCK_DGRAM
+    
     sock = socket(AF_INET, SOCK_DGRAM)
     sock.bind(("0.0.0.0", 1053))
 
@@ -193,6 +195,7 @@ Explanation:
 ### Step 3: Send Response
 
 Code:
+    
     dns_resp = DNS(
         id=dns_req.id,
         qr=1,
