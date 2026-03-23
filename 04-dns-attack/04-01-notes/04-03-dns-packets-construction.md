@@ -176,6 +176,7 @@ Explanation:
 ### Step 2: Build Response
 
 Code:
+    
     answer = DNSRR(
         rrname=dns_req.qd.qname,
         type="A",
