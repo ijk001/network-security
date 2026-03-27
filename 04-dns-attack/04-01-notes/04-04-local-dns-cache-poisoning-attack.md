@@ -69,10 +69,8 @@ Observe DNS query
 
 ---
 
-## Code       
+## 💻 Code    
 
-
- 
     from scapy.all import *
 
     def spoof_dns(pkt):
