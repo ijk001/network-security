@@ -1,7 +1,5 @@
 # 🧪 04-04: Local DNS Cache Poisoning
 
----
-
 ## 📌 Definition
 
 DNS cache poisoning is an attack where a malicious actor injects **false DNS records** into a DNS server’s cache.
