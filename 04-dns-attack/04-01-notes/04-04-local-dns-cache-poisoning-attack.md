@@ -56,22 +56,16 @@ A forged DNS response mimics a real one by matching key fields:
 
 ## 🧾 Simplified Pseudocode
 
-Observe DNS query
-    
-If domain matches target:
-    Extract domain name
+Observe DNS query   
 
-    Create fake IP header
-
-    Create fake UDP header
-
-    Create fake DNS answer record
-
-    Create fake authority record
-
-    Build DNS response matching request
-
-    Send fake response before real one
+    If domain matches target:
+        Extract domain name
+        Create fake IP header
+        Create fake UDP header
+        Create fake DNS answer record
+        Create fake authority record
+        Build DNS response matching request
+        Send fake response before real one
 
 ---
 
