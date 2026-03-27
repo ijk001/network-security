@@ -1,6 +1,4 @@
-# 🧪 DNS Rebinding Attack
-
----
+# 🧪 04-07: DNS Rebinding Attack
 
 ## 📌 Definition
 
@@ -18,7 +16,8 @@ DNS Rebinding is an attack that **bypasses the Same Origin Policy (SOP)** by cha
 Normal behavior:
 
 User → visits attacker website  
-Browser → enforces Same Origin Policy  
+Browser → enforces Same Origin Policy 
+
 👉 Cannot access internal network (e.g., 192.168.x.x)
 
 ---
