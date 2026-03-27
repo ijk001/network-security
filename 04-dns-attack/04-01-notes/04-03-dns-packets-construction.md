@@ -116,7 +116,7 @@ Fields:
 
 Code:
     
-
+    #!/usr/bin/env python3
     from scapy.all import *
     
     IPpkt  = IP(dst='8.8.8.8')        # DNS server
@@ -127,7 +127,7 @@ Code:
     DNSpkt = DNS(
         id=100,
         qr=0,
-        rd=1,
+        qdcount=1,
         qd=Qdsec
     )
 
@@ -154,6 +154,7 @@ Explanation:
 
 Code:
     
+    #!/usr/bin/env python3
     from scapy.all import *
     from socket import socket, AF_INET, SOCK_DGRAM
     
