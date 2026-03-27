@@ -217,6 +217,95 @@ Explanation:
 
 ---
 
+# 🧪 Advanced DNS Response (Answer + Authority + Additional)
+
+from scapy.all import *
+from socket import socket, AF_INET, SOCK_DGRAM
+
+# Create UDP socket (DNS server)
+sock = socket(AF_INET, SOCK_DGRAM)
+sock.bind(("0.0.0.0", 1053))   # Port 1053 (non-root DNS port)
+
+while True:
+    data, addr = sock.recvfrom(4096)
+
+    # Parse incoming DNS request
+    DNSreq = DNS(data)
+    query_name = DNSreq.qd.qname.decode()
+    print("Query:", query_name)
+
+    # -------------------------------
+    # 🟢 Answer Section (Final IP)
+    # -------------------------------
+    Anssec = DNSRR(
+        rrname=DNSreq.qd.qname,
+        type='A',
+        rdata='10.2.3.6',
+        ttl=259200
+    )
+
+    # -------------------------------
+    # 🟡 Authority Section (Name Servers)
+    # -------------------------------
+    NSsec1 = DNSRR(
+        rrname="example.com",
+        type='NS',
+        rdata='ns1.example.com',
+        ttl=259200
+    )
+
+    NSsec2 = DNSRR(
+        rrname="example.com",
+        type='NS',
+        rdata='ns2.example.com',
+        ttl=259200
+    )
+
+    # -------------------------------
+    # 🔵 Additional Section (IP of NS)
+    # -------------------------------
+    Addsec1 = DNSRR(
+        rrname='ns1.example.com',
+        type='A',
+        rdata='10.2.3.1',
+        ttl=259200
+    )
+
+    Addsec2 = DNSRR(
+        rrname='ns2.example.com',
+        type='A',
+        rdata='10.2.3.2',
+        ttl=259200
+    )
+
+    # -------------------------------
+    # 🔴 Build Full DNS Response
+    # -------------------------------
+    DNSpkt = DNS(
+        id=DNSreq.id,      # Match request ID
+        qr=1,              # Response
+        aa=1,              # Authoritative Answer
+        rd=0,              # Recursion not supported
+
+        qdcount=1,
+        ancount=1,
+        nscount=2,
+        arcount=2,
+
+        qd=DNSreq.qd,      # Original question
+        an=Anssec,         # Answer section
+        ns=NSsec1 / NSsec2,  # Authority section
+        ar=Addsec1 / Addsec2 # Additional section
+    )
+
+    # Debug print
+    print(repr(DNSpkt))
+
+    # Send response back to client
+    sock.sendto(bytes(DNSpkt), addr)
+
+---
+
 ## 🔄 Communication Flow
 
 Client → DNS Query → Server
