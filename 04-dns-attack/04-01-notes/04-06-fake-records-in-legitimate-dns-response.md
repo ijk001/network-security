@@ -1,4 +1,4 @@
-## 🎭 04-06: Fake Records in Legitimate DNS Response
+## 🎭 04-07: Fake Records in Legitimate DNS Response
 
 ### 📌 Definition
 

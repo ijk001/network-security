@@ -1,4 +1,4 @@
-# 💥 04-08: Denial-of-Service (DoS) Attacks on DNS
+# 💥 04-09: Denial-of-Service (DoS) Attacks on DNS
 
 ## 📌 Definition
 

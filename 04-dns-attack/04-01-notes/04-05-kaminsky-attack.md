@@ -1,4 +1,4 @@
-# 🧪 04-05: The Kaminsky Attack
+# 🧪 04-06: The Kaminsky Attack
 
 ## 📌 Definition
 

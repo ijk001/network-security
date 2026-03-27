@@ -1,4 +1,4 @@
-# 🧪 04-07: DNS Rebinding Attack
+# 🧪 04-08: DNS Rebinding Attack
 
 ## 📌 Definition
 
