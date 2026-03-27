@@ -1,6 +1,4 @@
-# 🧪 04-04: Local DNS Cache Poisoning (Reply Spoofing - Lab Use Only)
-
-📌 Basic Definition
+# 🧪 04-04: Local DNS Cache Poisoning
 
 DNS Cache Poisoning is an attack where a malicious actor injects false DNS records into a DNS server’s cache.
 
@@ -8,7 +6,10 @@ DNS Cache Poisoning is an attack where a malicious actor injects false DNS recor
 
 Users are redirected to wrong (attacker-controlled) IP addresses
 Even though they typed the correct domain name
-🧠 Simple Idea (Beginner Friendly)
+
+---
+
+##🧠 Simple Idea
 
 Normal DNS flow:
 
@@ -20,7 +21,9 @@ User → DNS Query → Attacker sends fake reply → Wrong IP cached → User re
 
 💥 The DNS server believes the attacker’s fake response
 
-⚠️ Key Concept (VERY IMPORTANT)
+---
+
+⚠️ Key Concept
 
 DNS uses UDP (connectionless)
 
@@ -36,8 +39,7 @@ First valid response wins
 
 ---
 
-# 🧪 Local DNS Cache Poisoning (Reply Spoofing - Lab Use Only)
-
+## Code
 
 from scapy.all import *
 
@@ -120,7 +122,8 @@ sniff(
 
 ---
 
-🧩 Step-by-Step Explanation (VERY CLEAR)
+## 🧩 Step-by-Step Explanation (VERY CLEAR)
+
 🟢 Step 1: Capture DNS Packet
 if DNS in pkt
 
@@ -129,9 +132,8 @@ if DNS in pkt
 🟢 Step 2: Extract Domain
 qname = pkt[DNS].qd.qname.decode()
 
-👉 Example:
+👉 Example: www.example.com
 
-www.example.com
 🟢 Step 3: Target Domain
 if "www.example.com" in qname
 
@@ -141,16 +143,16 @@ if "www.example.com" in qname
 IP(dst=pkt[IP].src, src=pkt[IP].dst)
 
 👉 Trick:
-
 Swap source & destination
 Pretend to be DNS server
+
 🔵 Step 5: Fake UDP Header
 UDP(dport=pkt[UDP].sport, sport=53)
 
 👉 Important:
-
 Source port must be 53 (DNS)
 Destination = victim’s port
+
 🟡 Step 6: Fake Answer
 rdata='1.2.3.4'
 
@@ -182,13 +184,14 @@ sniff(filter="udp port 53")
 
 👉 Listen for DNS queries continuously
 
-🎯 Final Intuition (VERY IMPORTANT)
+## 🎯 Final Intuition
 Component	Role in Attack
 Answer	Fake IP redirect
 Authority	Take control of domain
 UDP	No verification → easy spoof
 ID match	Makes packet look legit
-💥 What Happens After Attack
+
+## 💥 What Happens After Attack
 
 DNS server caches:
 
