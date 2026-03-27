@@ -78,7 +78,7 @@ If domain matches target:
 ## Code       
 
 
-        from scapy.all import *
+ from scapy.all import *
         def spoof_dns(pkt):
         # Step 1: Check if packet contains DNS query
         if DNS in pkt and pkt[DNS].qd is not None:
