@@ -60,24 +60,27 @@ Observe DNS query
     
 If domain matches target:
     Extract domain name
+
     Create fake IP header
+
     Create fake UDP header
+
     Create fake DNS answer record
+
     Create fake authority record
+
     Build DNS response matching request
+
     Send fake response before real one
 
 ---
 
-## Code
-
+## Code       
+        
 from scapy.all import *
 
 def spoof_dns(pkt):
     # Step 1: Check if packet contains DNS query
-    
-        
-        
     if DNS in pkt and pkt[DNS].qd is not None:
         qname = pkt[DNS].qd.qname.decode()
 
